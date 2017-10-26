@@ -1,0 +1,17 @@
+FROM php:7-fpm
+MAINTAINER bingzhou6@gmail.com
+
+# change aliyun mirrors
+RUN echo "deb http://mirrors.aliyun.com/debian/ jessie main non-free contrib\n\
+    deb http://mirrors.aliyun.com/debian/ jessie-proposed-updates main non-free contrib\n\
+    deb-src http://mirrors.aliyun.com/debian/ jessie main non-free contrib\n\
+    deb-src http://mirrors.aliyun.com/debian/ jessie-proposed-updates main non-free contrib\n\
+    " > /etc/apt/sources.list
+
+RUN apt-get update && apt-get install -y libmcrypt-dev mysql-client wget git unzip \
+    && docker-php-ext-install mcrypt pdo_mysql
+
+RUN wget https://dl.laravel-china.org/composer.phar -O /usr/local/bin/composer \
+    && chmod a+x /usr/local/bin/composer
+
+WORKDIR /var/www
